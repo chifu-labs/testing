@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mzuzu University — Administrative Forms</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh}
+header{background:#1a3a5c;color:#fff;padding:20px 32px;display:flex;align-items:center;gap:16px}
+header h1{font-size:20px;font-weight:600;letter-spacing:0.01em}
+header span{font-size:13px;opacity:0.7;margin-left:auto}
+.container{max-width:860px;margin:0 auto;padding:32px 24px}
+.menu{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap}
+.menu-btn{flex:1;min-width:160px;padding:12px 18px;border:1.5px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;font-weight:500;color:#555;text-align:center;transition:all 0.15s;font-family:'IBM Plex Sans',sans-serif}
+.menu-btn:hover{border-color:#1a3a5c;color:#1a3a5c;background:#f0f4f8}
+.menu-btn.active{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
+.form-panel{display:none}
+.form-panel.active{display:block}
+.section-card{background:#fff;border:1px solid #e0deda;border-radius:10px;padding:20px 24px;margin-bottom:16px}
+.section-header{font-size:11px;font-weight:600;color:#1a3a5c;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #e8e6e0}
+.field-row{display:grid;gap:14px;margin-bottom:14px}
+.field-row.cols-2{grid-template-columns:1fr 1fr}
+.field-row.cols-3{grid-template-columns:1fr 1fr 1fr}
+.field-group{display:flex;flex-direction:column;gap:5px}
+.field-group label{font-size:11px;color:#666;font-weight:600;letter-spacing:0.04em;text-transform:uppercase}
+.field-group input,.field-group select,.field-group textarea{border:1px solid #d0cec8;border-radius:6px;padding:9px 12px;font-size:13px;background:#fff;color:#1a1a1a;width:100%;font-family:'IBM Plex Sans',sans-serif;transition:border-color 0.15s}
+.field-group input:focus,.field-group select:focus,.field-group textarea:focus{outline:none;border-color:#1a3a5c;box-shadow:0 0 0 3px rgba(26,58,92,0.08)}
+.field-group textarea{resize:vertical;min-height:70px}
+.radio-row{display:flex;gap:20px;align-items:center;padding:8px 0}
+.radio-row label,.check-row label{display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;font-weight:400;text-transform:none;letter-spacing:0;color:#1a1a1a}
+.check-row{display:flex;flex-wrap:wrap;gap:14px;padding:8px 0}
+.table-scroll{overflow-x:auto;border-radius:6px;border:1px solid #e0deda}
+table.form-table{width:100%;border-collapse:collapse;font-size:12px;min-width:480px}
+table.form-table th{background:#f0ede8;padding:9px 12px;text-align:left;font-weight:600;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;border-bottom:1px solid #e0deda;color:#444}
+table.form-table td{padding:4px 6px;border-bottom:1px solid #f0ede8}
+table.form-table tbody tr:last-child td{border-bottom:none}
+table.form-table tfoot td{background:#f8f7f4;border-top:1px solid #e0deda;padding:8px 10px}
+table.form-table td input{border:none;background:transparent;width:100%;font-size:12px;color:#1a1a1a;padding:6px;font-family:'IBM Plex Sans',sans-serif}
+table.form-table td input:focus{outline:1px solid #1a3a5c;border-radius:4px;background:#f0f4f8}
+.add-row-btn{margin-top:10px;padding:7px 14px;font-size:12px;border:1px solid #d0cec8;border-radius:6px;cursor:pointer;background:#f8f7f4;color:#444;font-family:'IBM Plex Sans',sans-serif}
+.add-row-btn:hover{background:#e8e4de}
+.sig-field{border-bottom:1.5px solid #aaa;min-height:30px;margin-top:4px}
+.note{font-size:12px;color:#888;font-style:italic;margin-top:12px;padding:10px 14px;background:#fdf9f0;border-left:3px solid #c8a84b;border-radius:0 6px 6px 0}
+.submit-row{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid #e0deda}
+.btn-print{padding:11px 22px;border:1px solid #bbb;border-radius:7px;background:#fff;cursor:pointer;font-size:13px;font-weight:500;color:#444;font-family:'IBM Plex Sans',sans-serif}
+.btn-print:hover{background:#f5f4f0}
+.btn-submit{padding:11px 22px;border:none;border-radius:7px;background:#1a3a5c;cursor:pointer;font-size:13px;font-weight:600;color:#fff;font-family:'IBM Plex Sans',sans-serif;letter-spacing:0.02em}
+.btn-submit:hover{background:#15304d}
+.form-heading{font-size:18px;font-weight:600;margin-bottom:4px}
+.form-ref{font-size:12px;color:#888;margin-bottom:24px}
+@media(max-width:600px){
+  .field-row.cols-2,.field-row.cols-3{grid-template-columns:1fr}
+  .container{padding:20px 14px}
+  header{padding:14px 18px}
+}
+@media print{
+  header{background:#1a3a5c!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .menu,.submit-row{display:none}
+  .form-panel{display:block!important}
+  .section-card{break-inside:avoid;border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Mzuzu University</h1>
+    <div style="font-size:12px;opacity:0.6;margin-top:2px">Administrative Forms Portal</div>
+  </div>
+  <span id="curr-date"></span>
+</header>
+
+<div class="container">
+  <div class="menu">
+    <button class="menu-btn active" onclick="showForm('fuel')">&#9651; Fuel Requisition</button>
+    <button class="menu-btn" onclick="showForm('procurement')">&#9633; Request for Procurement</button>
+    <button class="menu-btn" onclick="showForm('travel')">&#9671; Travel &amp; Subsistence</button>
+  </div>
+
+  <!-- ===== FORM 1: FUEL REQUISITION ===== -->
+  <div class="form-panel active" id="form-fuel">
+    <div class="form-heading">Fuel Requisition</div>
+    <div class="form-ref">Ref: MZUNI/FUEL &nbsp;|&nbsp; Page 1 of 1</div>
+
+    <div class="section-card">
+      <div class="section-header">Section A — Applicant / Driver &nbsp;(complete 48 hrs before departure)</div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Full Name</label><input type="text" placeholder="Enter full name"></div>
+        <div class="field-group"><label>Position</label><input type="text" placeholder="Enter position"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Department / Section</label><input type="text" placeholder="Enter department or section"></div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Destination</label><input type="text" placeholder="Enter destination"></div>
+        <div class="field-group"><label>Purpose of Trip</label><input type="text" placeholder="Describe purpose"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">Section B — Transport Officer</div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Vehicle No.</label><input type="text" placeholder="e.g. MZ 1234"></div>
+        <div class="field-group"><label>Type of Vehicle</label><input type="text" placeholder="e.g. Toyota Land Cruiser"></div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Engine Capacity</label><input type="text" placeholder="e.g. 2000cc"></div>
+        <div class="field-group"><label>University / Private Vehicle</label>
+          <select><option value="">-- Select --</option><option>University Vehicle</option><option>Private Vehicle</option></select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Type of Fuel</label>
+          <div class="radio-row">
+            <label><input type="radio" name="fuel_type" value="diesel"> Diesel</label>
+            <label><input type="radio" name="fuel_type" value="petrol"> Petrol</label>
+          </div>
+        </div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Previous Fuel Allocated (litres)</label><input type="text" placeholder="Amount / litres"></div>
+        <div class="field-group"><label>Date of Previous Allocation</label><input type="date"></div>
+      </div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Opening Mileage (km)</label><input type="number" placeholder="km" id="open_km" oninput="calcDist()"></div>
+        <div class="field-group"><label>Closing Mileage (km)</label><input type="number" placeholder="km" id="close_km" oninput="calcDist()"></div>
+        <div class="field-group"><label>Distance Covered (km)</label><input type="number" placeholder="auto-calculated" id="dist_km" readonly style="background:#f8f7f4"></div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Amount of Fuel Required (litres)</label><input type="number" placeholder="litres" id="fuel_litres" oninput="calcFuelCost()"></div>
+        <div class="field-group"><label>Other Lubricants Required</label>
+          <div class="check-row">
+            <label><input type="checkbox"> Engine Oil</label>
+            <label><input type="checkbox"> Transmission Oil</label>
+            <label><input type="checkbox"> Brake Fluid</label>
+          </div>
+        </div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Cost per Litre (MK)</label><input type="number" placeholder="MK" id="cost_litre" oninput="calcFuelCost()"></div>
+        <div class="field-group"><label>Total Cost for Fuel (MK)</label><input type="number" placeholder="auto-calculated" id="total_fuel" readonly style="background:#f8f7f4"></div>
+      </div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Transport Officer Name</label><input type="text" placeholder="Full name"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Post</label><input type="text" placeholder="Post title"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">Section C — Head of Department</div>
+      <div class="field-row">
+        <div class="field-group"><label>Decision</label>
+          <select><option value="">-- Select --</option><option>I approve the supply of fuel</option><option>I do not approve the supply of fuel</option></select>
+        </div>
+      </div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text" placeholder="Full name"></div>
+        <div class="field-group"><label>Position</label><input type="text" placeholder="Position"></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">Section D — University Registrar</div>
+      <div class="field-row">
+        <div class="field-group"><label>Decision</label>
+          <select><option value="">-- Select --</option><option>I approve the supply of fuel</option><option>I do not approve the supply of fuel</option></select>
+        </div>
+      </div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text" placeholder="Full name"></div>
+        <div class="field-group"><label>Position</label><input type="text" placeholder="Position"></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">Section E — Director of Finance</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text" placeholder="Full name"></div>
+        <div class="field-group"><label>Position</label><input type="text" placeholder="Position"></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+      <p class="note">Note: The form must be endorsed by Head of Department in Section C before submission.</p>
+    </div>
+
+    <div class="submit-row">
+      <button class="btn-print" onclick="window.print()">&#128438; Print</button>
+      <button class="btn-submit">Submit Form</button>
+    </div>
+  </div>
+
+  <!-- ===== FORM 2: PROCUREMENT ===== -->
+  <div class="form-panel" id="form-procurement">
+    <div class="form-heading">Request for Use of Funds for Procurement</div>
+    <div class="form-ref">Ref: ADM/08/11/13 &nbsp;|&nbsp; Revised 26.7.2021 &nbsp;|&nbsp; Pages 1–4</div>
+
+    <div class="section-card">
+      <div class="section-header">A — Details of Initiator of Request</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text" placeholder="Full name"></div>
+        <div class="field-group"><label>Post</label><input type="text" placeholder="Post title"></div>
+        <div class="field-group"><label>Grade</label><input type="text" placeholder="Grade"></div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Department / Section / Project / Cost Centre</label><input type="text" placeholder="Enter department or cost centre"></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Nature of Request — tick ONE budget category per form</label>
+          <div class="check-row" style="margin-top:4px">
+            <label><input type="radio" name="budget_cat"> Office Supplies</label>
+            <label><input type="radio" name="budget_cat"> Teaching Supplies / Services</label>
+            <label><input type="radio" name="budget_cat"> Capital Expenditure / Equipment</label>
+            <label><input type="radio" name="budget_cat"> Other</label>
+          </div>
+        </div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Requires IPC / Central Procurement?</label>
+          <div class="radio-row"><label><input type="radio" name="ipc"> Yes</label><label><input type="radio" name="ipc"> No</label></div>
+        </div>
+        <div class="field-group"><label>Funds to support curriculum event (no IPC)?</label>
+          <div class="radio-row"><label><input type="radio" name="event_funds"> Yes</label><label><input type="radio" name="event_funds"> No</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">B — Brief Description of Use of Funds</div>
+      <div class="table-scroll">
+        <table class="form-table">
+          <thead><tr>
+            <th style="width:36px">#</th>
+            <th>Description of Goods / Services / Specification</th>
+            <th style="width:80px">Quantity</th>
+            <th style="width:110px">Date Required</th>
+            <th style="width:120px">Approx. Cost (MK)</th>
+          </tr></thead>
+          <tbody id="proc-tbody"></tbody>
+          <tfoot><tr>
+            <td colspan="4" style="text-align:right;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#444">Total (MK)</td>
+            <td><input id="proc-total" type="text" readonly style="font-weight:600;background:#f0ede8"></td>
+          </tr></tfoot>
+        </table>
+      </div>
+      <button class="add-row-btn" onclick="addProcRow()">+ Add row</button>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">C — Comments by Head of Department / Cost Centre Manager</div>
+      <div class="field-row"><div class="field-group"><label>Source of Funds</label>
+        <div class="radio-row">
+          <label><input type="radio" name="fund_src"> Self Generated</label>
+          <label><input type="radio" name="fund_src"> Project Funds</label>
+          <label><input type="radio" name="fund_src"> Subvention</label>
+        </div>
+      </div></div>
+      <div class="field-row"><div class="field-group"><label>Comment</label><textarea placeholder="Enter comment"></textarea></div></div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">D — Recommendation by Dean / Principal Officer</div>
+      <div class="field-row"><div class="field-group"><label>Decision</label>
+        <select><option value="">-- Select --</option><option>I recommend payment</option><option>I do not recommend payment</option></select>
+      </div></div>
+      <div class="field-row"><div class="field-group"><label>Comment</label><textarea placeholder="Enter comment"></textarea></div></div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">E — Availability of Budget and Funds</div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Budget available?</label>
+          <div class="radio-row"><label><input type="radio" name="budget_avail"> Confirmed</label><label><input type="radio" name="budget_avail"> Not confirmed</label></div>
+        </div>
+        <div class="field-group"><label>Funds available?</label>
+          <div class="radio-row"><label><input type="radio" name="funds_avail"> Confirmed</label><label><input type="radio" name="funds_avail"> Not confirmed</label></div>
+        </div>
+      </div>
+      <div class="field-row"><div class="field-group"><label>Comment</label><textarea placeholder="Enter comment"></textarea></div></div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>DOF Name (or MA / FA delegate)</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">F — Comments by University Registrar</div>
+      <div class="field-row"><div class="field-group"><label>Comment</label><textarea placeholder="Enter comment"></textarea></div></div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">G — Approval by Vice-Chancellor</div>
+      <div class="field-row"><div class="field-group"><label>Decision</label>
+        <select><option value="">-- Select --</option><option>I approve payment from Cost Centre Budget</option><option>I do not approve payment from Cost Centre Budget</option></select>
+      </div></div>
+      <div class="field-row"><div class="field-group"><label>Comment</label><textarea placeholder="Enter comment"></textarea></div></div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">H — Recommendation by Chief Procurement Officer</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">I — Authorization of Payment by Director of Finance</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <button class="btn-print" onclick="window.print()">&#128438; Print</button>
+      <button class="btn-submit">Submit Form</button>
+    </div>
+  </div>
+
+  <!-- ===== FORM 3: TRAVEL & SUBSISTENCE ===== -->
+  <div class="form-panel" id="form-travel">
+    <div class="form-heading">Request for Use of Funds — Internal Travel &amp; Subsistence</div>
+    <div class="form-ref">Ref: ADM/02/11/13 &nbsp;|&nbsp; Revised 26.7.2021 &nbsp;|&nbsp; To be submitted 48 hrs before travel</div>
+
+    <div class="section-card">
+      <div class="section-header">A — Details of Initiator of Request</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text" placeholder="Full name"></div>
+        <div class="field-group"><label>Post</label><input type="text" placeholder="Post title"></div>
+        <div class="field-group"><label>Grade</label><input type="text" placeholder="Grade"></div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Department / Section / Project / Cost Centre</label><input type="text" value="Water and Sanitation – PEER PROJECT"></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Will any funds be refunded by a 3rd party?</label>
+          <div class="radio-row"><label><input type="radio" name="refund3p"> Yes</label><label><input type="radio" name="refund3p"> No</label></div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>If yes — brief details of 3rd party refund (attach documentation)</label>
+          <textarea rows="3" placeholder="Describe anticipated refund and attach supporting documentation"></textarea>
+        </div>
+      </div>
+      <p style="font-size:12px;color:#555;margin-bottom:14px;padding:10px 14px;background:#fff9ee;border-left:3px solid #c8a84b;border-radius:0 6px 6px 0">
+        I, (Name) _________________________ understand that I am receiving an advance for travel for which I will be reimbursed by a 3rd party. I undertake to repay this amount within 7 days of my return or, failing that, have the amount deducted from my salary.
+      </p>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name (undertaking)</label><input type="text" placeholder="Full name"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">B — Description of Use of Funds (travel details)</div>
+      <div class="table-scroll">
+        <table class="form-table">
+          <thead><tr>
+            <th>Name(s) incl. Driver</th>
+            <th>Purpose, Destination, Duration, Departure &amp; Return Dates</th>
+            <th style="width:110px">Fuel / Bus Fare (MK)</th>
+            <th style="width:110px">Subsistence (MK)</th>
+            <th style="width:110px">Total Cost (MK)</th>
+          </tr></thead>
+          <tbody id="travel-tbody"></tbody>
+          <tfoot><tr>
+            <td colspan="4" style="text-align:right;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#444">Total (MK)</td>
+            <td><input id="travel-total" type="text" readonly style="font-weight:600;background:#f0ede8"></td>
+          </tr></tfoot>
+        </table>
+      </div>
+      <button class="add-row-btn" onclick="addTravelRow()">+ Add row</button>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">C — Comments by Head of Department / Cost Centre Manager</div>
+      <div class="field-row"><div class="field-group"><label>Source of Funds</label>
+        <div class="radio-row">
+          <label><input type="radio" name="t_fund_src"> Self Generated</label>
+          <label><input type="radio" name="t_fund_src"> Project Funds</label>
+          <label><input type="radio" name="t_fund_src"> Subvention</label>
+        </div>
+      </div></div>
+      <div class="field-row"><div class="field-group"><label>Comment</label><textarea placeholder="Enter comment"></textarea></div></div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">D — Recommendation by Dean / Principal Officer</div>
+      <div class="field-row"><div class="field-group"><label>Decision</label>
+        <select><option value="">-- Select --</option><option>I recommend payment</option><option>I do not recommend payment</option></select>
+      </div></div>
+      <div class="field-row"><div class="field-group"><label>Comment</label><textarea placeholder="Enter comment"></textarea></div></div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">E — Availability of Budget and Funds</div>
+      <div class="field-row cols-2">
+        <div class="field-group"><label>Budget available?</label>
+          <div class="radio-row"><label><input type="radio" name="t_budget_avail"> Confirmed</label><label><input type="radio" name="t_budget_avail"> Not confirmed</label></div>
+        </div>
+        <div class="field-group"><label>Funds available?</label>
+          <div class="radio-row"><label><input type="radio" name="t_funds_avail"> Confirmed</label><label><input type="radio" name="t_funds_avail"> Not confirmed</label></div>
+        </div>
+      </div>
+      <div class="field-row"><div class="field-group"><label>Comment</label><textarea placeholder="Enter comment"></textarea></div></div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>DOF Name (or MA / FA delegate)</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">F — Comments by University Registrar</div>
+      <div class="field-row"><div class="field-group"><label>Comment</label><textarea placeholder="Enter comment"></textarea></div></div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Name</label><input type="text"></div>
+        <div class="field-group"><label>Signature</label><div class="sig-field"></div></div>
+        <div class="field-group"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <button class="btn-print" onclick="window.print()">&#128438; Print</button>
+      <button class="btn-submit">Submit Form</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('curr-date').textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+function showForm(id){
+  document.querySelectorAll('.form-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.menu-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('form-'+id).classList.add('active');
+  const idx={fuel:0,procurement:1,travel:2}[id];
+  document.querySelectorAll('.menu-btn')[idx].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function calcDist(){
+  const o=parseFloat(document.getElementById('open_km').value)||0;
+  const c=parseFloat(document.getElementById('close_km').value)||0;
+  document.getElementById('dist_km').value=c>o?c-o:'';
+}
+
+function calcFuelCost(){
+  const l=parseFloat(document.getElementById('fuel_litres').value)||0;
+  const p=parseFloat(document.getElementById('cost_litre').value)||0;
+  document.getElementById('total_fuel').value=l&&p?(l*p).toFixed(2):'';
+}
+
+function addProcRow(){
+  const tb=document.getElementById('proc-tbody');
+  const n=tb.rows.length+1;
+  const tr=tb.insertRow();
+  tr.innerHTML=`<td style="text-align:center;padding:6px;font-size:12px;color:#888">${n}</td>
+    <td><input type="text" placeholder="Description of goods or services" oninput="calcProc()"></td>
+    <td><input type="number" placeholder="0" oninput="calcProc()"></td>
+    <td><input type="date"></td>
+    <td><input type="number" placeholder="0" oninput="calcProc()"></td>`;
+}
+
+function calcProc(){
+  let t=0;
+  document.querySelectorAll('#proc-tbody tr').forEach(r=>{
+    t+=parseFloat(r.cells[4].querySelector('input').value)||0;
+  });
+  document.getElementById('proc-total').value=t>0?t.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):'';
+}
+
+function addTravelRow(){
+  const tb=document.getElementById('travel-tbody');
+  const tr=tb.insertRow();
+  tr.innerHTML=`<td><input type="text" placeholder="Name(s)"></td>
+    <td><input type="text" placeholder="Purpose, destination, dates"></td>
+    <td><input type="number" placeholder="0" class="fuel-in"></td>
+    <td><input type="number" placeholder="0" class="subs-in"></td>
+    <td><input type="text" readonly style="background:#f8f7f4" class="row-total"></td>`;
+  tr.querySelectorAll('.fuel-in,.subs-in').forEach(i=>i.addEventListener('input',()=>{
+    const f=parseFloat(tr.querySelector('.fuel-in').value)||0;
+    const s=parseFloat(tr.querySelector('.subs-in').value)||0;
+    const rowT=f+s;
+    tr.querySelector('.row-total').value=rowT>0?rowT.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):'';
+    calcTravel();
+  }));
+}
+
+function calcTravel(){
+  let t=0;
+  document.querySelectorAll('#travel-tbody .row-total').forEach(i=>{
+    t+=parseFloat((i.value||'').replace(/,/g,''))||0;
+  });
+  document.getElementById('travel-total').value=t>0?t.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):'';
+}
+
+// seed rows
+for(let i=0;i<4;i++) addProcRow();
+for(let i=0;i<4;i++) addTravelRow();
+</script>
+</body>
+</html>
